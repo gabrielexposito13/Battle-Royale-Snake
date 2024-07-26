@@ -17,6 +17,9 @@ bool Snake::hasConsumedFood(const sf::RectangleShape& food) const
 	return food.getGlobalBounds().intersects(snake.getGlobalBounds());
 }
 
+
+//TODO: Snake body following doesn't work
+
 void Snake::moveLeft() {
 	sf::Vector2f priorPosition;
 	for (size_t index = 0; index < m_rectangles.size(); index++) {
