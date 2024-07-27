@@ -10,7 +10,7 @@ public:
 		sf::RectangleShape head;
 		head.setFillColor(sf::Color::Green);
 		head.setPosition(DEFAULT_SNAKE_X, DEFAULT_SNAKE_Y);
-		head.setSize(sf::Vector2f(10, 10));
+		head.setSize(sf::Vector2f(DEFAULT_SNAKE_SIZE_X, DEFAULT_SNAKE_SIZE_Y));
 		m_rectangles.push_back(head);
 	}
 	~Snake() {
@@ -33,9 +33,13 @@ public:
 	sf::Vector2f getHeadPosition() const;
 	Snake::Direction getDirection() const;
 	void setDirection(Snake::Direction direction);
+	bool hasEatenItSelf() const;
+	void verifyEatenItSelf();
 private:
 	Direction m_currentDirection = Direction::None;
 	std::vector<sf::RectangleShape> m_rectangles = {};
+	bool m_hasEaten = false;
+	bool m_hasEatenItSelf = false;
 };
 
 #endif

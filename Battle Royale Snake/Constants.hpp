@@ -1,10 +1,20 @@
 #ifndef CONSTANTS_HPP
 #define CONSTANTS_HPP
 
-#define WIDTH 800
-#define HEIGHT 800
+#define WIDTH 1600
+#define HEIGHT 1600
 
 #define DEFAULT_SNAKE_X 200
 #define DEFAULT_SNAKE_Y 200
+
+#define DEFAULT_SNAKE_SIZE_X 20
+#define DEFAULT_SNAKE_SIZE_Y 20
+
+#define TICKS_TILL_GAMEOVER_SWAPS_BACK_TO_MENU 50*3
+
+#define TITLE_FONT_SIZE 100
+#define NON_TITLE_FONT_SIZE 70
+
+#define FPS 30
 
 #endif

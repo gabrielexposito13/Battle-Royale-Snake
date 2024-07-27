@@ -32,10 +32,17 @@ void GameStateLoop::update()
 {
 	switch (this->m_gameState) {
 		case GameState::OnMenu: {
+			m_gameOverTicks = 0u;
 			break;
 		}
 		case GameState::InGame: {
 			m_gameLoop->moveSnake();
+			if (m_gameLoop->isGameOver()) {
+				if (m_gameOverTicks > TICKS_TILL_GAMEOVER_SWAPS_BACK_TO_MENU) {
+					m_gameState = GameState::OnMenu;
+				}
+				m_gameOverTicks++;
+			}
 			break;
 		}
 	}

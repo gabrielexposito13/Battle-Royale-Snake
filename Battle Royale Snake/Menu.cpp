@@ -1,18 +1,20 @@
 #include "Menu.hpp"
+#include "Constants.hpp"
 
 void Menu::render(sf::RenderWindow& window)
 {
 
 	sf::Text titleText;
 	titleText.setFont(m_font);
-	titleText.setPosition(110, 150);
-	titleText.setCharacterSize(50);
+	titleText.setPosition(110*2, 150*2);
+	titleText.setCharacterSize(TITLE_FONT_SIZE);
 	titleText.setFillColor(sf::Color::Green); // Change based on selection
 	titleText.setString("Snake with Battle Royale");
 
 	sf::Text singlePlayerText;
 	singlePlayerText.setFont(m_font);
-	singlePlayerText.setPosition(300, 250);
+	singlePlayerText.setCharacterSize(NON_TITLE_FONT_SIZE);
+	singlePlayerText.setPosition(300*2 - 25, 250*2 - 25);
 
 	switch (m_options) {
 		case MenuOptions::SinglePlayer: {
@@ -46,7 +48,8 @@ void Menu::render(sf::RenderWindow& window)
 	}
 	sf::Text multiplayerText;
 	multiplayerText.setFont(m_font);
-	multiplayerText.setPosition(255, 300);
+	multiplayerText.setPosition(255*2 - 25, 300*2 - 25);
+	multiplayerText.setCharacterSize(NON_TITLE_FONT_SIZE);
 	multiplayerText.setFillColor(multiplayerColor);
 	multiplayerText.setString("Battle Royale Mode ");
 

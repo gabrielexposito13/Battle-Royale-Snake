@@ -18,71 +18,81 @@ bool Snake::hasConsumedFood(const sf::RectangleShape& food) const
 }
 
 
-//TODO: Snake body following doesn't work
-
 void Snake::moveLeft() {
 	sf::Vector2f priorPosition;
-	for (size_t index = 0; index < m_rectangles.size(); index++) {
-		auto& rectangle = m_rectangles[index];
-		auto postion = rectangle.getPosition();
-		auto size = rectangle.getSize();
-		priorPosition = postion;
-		if (index == 0) {
-			rectangle.setPosition(postion.x - size.x, postion.y);
-		}
-		else
-			rectangle.setPosition(priorPosition);
+	auto head = m_rectangles.front();
+	auto postion = head.getPosition();
+	auto size = head.getSize();
+	sf::RectangleShape newHead;
+	newHead.setFillColor(sf::Color::Green);
+	newHead.setPosition(postion.x - size.x, postion.y);
+	newHead.setSize(size);
+	m_rectangles.insert(m_rectangles.begin(), newHead);
+	if (m_hasEaten) {
+		m_hasEaten = false;
 	}
-	m_currentDirection = Direction::Left;
+	else {
+		m_rectangles.pop_back();
+	}
+	verifyEatenItSelf();
+	setDirection(Direction::Left);
 }
 
 void Snake::moveRight() {
 	sf::Vector2f priorPosition;
-	for (size_t index = 0; index < m_rectangles.size(); index++) {
-		auto& rectangle = m_rectangles[index];
-		auto postion = rectangle.getPosition();
-		auto size = rectangle.getSize();
-		priorPosition = postion;
-		if (index == 0) {
-			rectangle.setPosition(postion.x + size.x, postion.y);
-		}
-		else
-			rectangle.setPosition(priorPosition);
+	auto head = m_rectangles.front();
+	auto postion = head.getPosition();
+	auto size = head.getSize();
+	sf::RectangleShape newHead;
+	newHead.setSize(size);
+	newHead.setFillColor(sf::Color::Green);
+	newHead.setPosition(postion.x + size.x, postion.y);
+	m_rectangles.insert(m_rectangles.begin(), newHead);
+	if (m_hasEaten) {
+		m_hasEaten = false;
 	}
-	m_currentDirection = Direction::Right;
+	else {
+		m_rectangles.pop_back();
+	}
+	verifyEatenItSelf();
+	setDirection(Direction::Right);
 }
 
 void Snake::moveUp() {
-	sf::Vector2f priorPosition;
-	for (size_t index = 0; index < m_rectangles.size(); index++) {
-		auto& rectangle = m_rectangles[index];
-		priorPosition = rectangle.getPosition();
-		auto postion = rectangle.getPosition();
-		auto size = rectangle.getSize();
-		priorPosition = postion;
-		if (index == 0) {
-			rectangle.setPosition(postion.x, postion.y - size.y);
-		}
-		else
-			rectangle.setPosition(priorPosition);
+	auto head = m_rectangles.front();
+	auto postion = head.getPosition();
+	auto size = head.getSize();
+	sf::RectangleShape newHead;
+	newHead.setSize(size);
+	newHead.setFillColor(sf::Color::Green);
+	newHead.setPosition(postion.x, postion.y - size.y);
+	m_rectangles.insert(m_rectangles.begin(), newHead);
+	if (m_hasEaten) {
+		m_hasEaten = false;
 	}
-	m_currentDirection = Direction::Up;
+	else {
+		m_rectangles.pop_back();
+	}
+	verifyEatenItSelf();
+	setDirection(Direction::Up);
 }
 
 void Snake::moveDown() {
-	sf::Vector2f priorPosition;
-	for (size_t index = 0; index < m_rectangles.size(); index++) {
-		auto& rectangle = m_rectangles[index];
-		auto postion = rectangle.getPosition();
-		auto size = rectangle.getSize();
-		priorPosition = postion;
-		if (index == 0) {
-			rectangle.setPosition(postion.x, postion.y + size.y);
-		}
-		else
-			rectangle.setPosition(priorPosition);
+	auto head = m_rectangles.front();
+	auto postion = head.getPosition();
+	auto size = head.getSize();
+	sf::RectangleShape newHead;
+	newHead.setSize(size);
+	newHead.setFillColor(sf::Color::Green);
+	newHead.setPosition(postion.x, postion.y + size.y);
+	m_rectangles.insert(m_rectangles.begin(), newHead);
+	if (m_hasEaten) {
+		m_hasEaten = false;
 	}
-	m_currentDirection = Direction::Down;
+	else {
+		m_rectangles.pop_back();
+	}
+	setDirection(Direction::Down);
 }
 
 void Snake::grow()
@@ -110,8 +120,9 @@ void Snake::grow()
 			break;
 		}
 	}
-	newHead.setSize(sf::Vector2f(10, 10));
+	newHead.setSize(headSize);
 	m_rectangles.insert(m_rectangles.begin(), newHead);
+	m_hasEaten = true;
 }
 
 sf::Vector2f Snake::getHeadPosition() const
@@ -122,7 +133,52 @@ sf::Vector2f Snake::getHeadPosition() const
 
 void Snake::setDirection(Snake::Direction direction)
 {
+	if (m_hasEatenItSelf) {
+		m_currentDirection = direction;
+		return;
+	}
+		
+	switch (m_currentDirection) {
+	case Snake::Direction::Left: {
+		m_hasEatenItSelf = (direction == Snake::Direction::Right) && m_rectangles.size() > 1;
+		break;
+	}
+	case Snake::Direction::Right: {
+		m_hasEatenItSelf = (direction == Snake::Direction::Left) && m_rectangles.size() > 1;
+		break;
+	}
+	case Snake::Direction::Up: {
+		m_hasEatenItSelf = (direction == Snake::Direction::Down) && m_rectangles.size() > 1;
+		break;
+	}
+	case Snake::Direction::Down: {
+		m_hasEatenItSelf = (direction == Snake::Direction::Up) && m_rectangles.size() > 1;
+		break;
+	}
+	}
 	m_currentDirection = direction;
+}
+
+bool Snake::hasEatenItSelf() const
+{
+	return m_hasEatenItSelf;
+}
+
+void Snake::verifyEatenItSelf()
+{
+	for (size_t index = 0; (index < m_rectangles.size()) && !m_hasEatenItSelf; index++) {
+		for (size_t index2 = 0; index2 < m_rectangles.size(); index2++) {
+			if (index == index2)
+				continue;
+			auto& rectangle1 = m_rectangles[index];
+			auto& rectangle2 = m_rectangles[index2];
+			if (rectangle1.getGlobalBounds().intersects(rectangle2.getGlobalBounds())) {
+				m_hasEatenItSelf = true;
+				break;
+			}
+		}
+
+	}
 }
 
 Snake::Direction Snake::getDirection() const

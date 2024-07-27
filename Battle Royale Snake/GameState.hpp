@@ -14,6 +14,7 @@ public:
 	void processEvent(sf::RenderWindow& window, sf::Event& event);
 	void update();
 private:
+	uint16_t m_gameOverTicks = 0u;
 	enum GameState {
 		OnMenu,
 		InGame,

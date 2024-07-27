@@ -15,17 +15,19 @@ public:
 		uint16_t x = 0;
 		uint16_t y = 0;
 		do {
-			x = (gen32() % WIDTH);
-			y = (gen32() % HEIGHT);
+			x = ((gen32() - DEFAULT_SNAKE_SIZE_X) % WIDTH);
+			y = ((gen32() - DEFAULT_SNAKE_SIZE_Y) % HEIGHT);
 		} while (x == DEFAULT_SNAKE_X && y == DEFAULT_SNAKE_Y);
 		m_food.setPosition(x, y);
-		m_food.setSize(sf::Vector2f(10, 10));
+		m_food.setSize(sf::Vector2f(DEFAULT_SNAKE_SIZE_X, DEFAULT_SNAKE_SIZE_Y));
 	}
 	~GameLoop() = default;
 
 	void render(sf::RenderWindow& window);
 	void processEvent(sf::RenderWindow& window, sf::Event& event);
 	void moveSnake();
+
+	bool isGameOver() const;
 
 private:
 	bool m_isMultiplayer;

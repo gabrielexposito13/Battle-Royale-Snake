@@ -4,7 +4,7 @@
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Snake Battle Royale");
-    window.setFramerateLimit(10);
+    window.setFramerateLimit(FPS);
     GameStateLoop gameStateLoop;
 
     while (window.isOpen())
