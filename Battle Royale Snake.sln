@@ -5,6 +5,8 @@ VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Battle Royale Snake", "Battle Royale Snake\Battle Royale Snake.vcxproj", "{A4865DD9-B9E8-4B14-B3AB-824809F89432}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SnakeBattleRoyaleServer", "SnakeBattleRoyaleServer\SnakeBattleRoyaleServer.vcxproj", "{B349C0FB-8226-4D54-82A2-C65CD6514C2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{A4865DD9-B9E8-4B14-B3AB-824809F89432}.Release|x64.Build.0 = Release|x64
 		{A4865DD9-B9E8-4B14-B3AB-824809F89432}.Release|x86.ActiveCfg = Release|Win32
 		{A4865DD9-B9E8-4B14-B3AB-824809F89432}.Release|x86.Build.0 = Release|Win32
+		{B349C0FB-8226-4D54-82A2-C65CD6514C2B}.Debug|x64.ActiveCfg = Debug|x64
+		{B349C0FB-8226-4D54-82A2-C65CD6514C2B}.Debug|x64.Build.0 = Debug|x64
+		{B349C0FB-8226-4D54-82A2-C65CD6514C2B}.Debug|x86.ActiveCfg = Debug|Win32
+		{B349C0FB-8226-4D54-82A2-C65CD6514C2B}.Debug|x86.Build.0 = Debug|Win32
+		{B349C0FB-8226-4D54-82A2-C65CD6514C2B}.Release|x64.ActiveCfg = Release|x64
+		{B349C0FB-8226-4D54-82A2-C65CD6514C2B}.Release|x64.Build.0 = Release|x64
+		{B349C0FB-8226-4D54-82A2-C65CD6514C2B}.Release|x86.ActiveCfg = Release|Win32
+		{B349C0FB-8226-4D54-82A2-C65CD6514C2B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

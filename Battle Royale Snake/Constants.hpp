@@ -17,4 +17,7 @@
 
 #define FPS 30
 
+#define SERVER_ADDRESS "127.0.0.1"
+#define SERVER_PORT "42069"
+
 #endif

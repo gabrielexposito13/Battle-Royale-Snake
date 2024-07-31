@@ -4,6 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include "Snake.hpp"
 #include <random>
+#include <future>
+#include "Client.hpp"
+
 
 class GameLoop {
 public:
@@ -20,6 +23,20 @@ public:
 		} while (x == DEFAULT_SNAKE_X && y == DEFAULT_SNAKE_Y);
 		m_food.setPosition(x, y);
 		m_food.setSize(sf::Vector2f(DEFAULT_SNAKE_SIZE_X, DEFAULT_SNAKE_SIZE_Y));
+		if (isMultiplayer) {
+			m_client = std::make_shared<Client>();
+			if (m_client->operator bool()) {
+				isMultiplayer = false; // We failed to get online
+			}
+			else {
+				std::async([](std::weak_ptr<Client> weakClient) {
+					if (auto client = weakClient.lock()) {
+						client->updateScore(0);
+					}
+				}, m_client);
+			}
+		}
+
 	}
 	~GameLoop() = default;
 
@@ -32,10 +49,14 @@ public:
 private:
 	bool m_isMultiplayer;
 	uint64_t m_score;
+	uint64_t m_rank = UINT64_MAX;
+	uint64_t m_particapantCount = 1;
 	bool m_isGameOver;
 	Snake m_snake;
 	sf::Font m_font;
 	sf::RectangleShape m_food;
+	std::shared_ptr<Client> m_client = nullptr;
+	
 
 };
 

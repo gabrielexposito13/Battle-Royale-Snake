@@ -15,6 +15,16 @@ void GameLoop::render(sf::RenderWindow& window)
 			m_snake.render(window);
 			window.draw(m_food);
 			window.draw(scoreText);
+			if (m_isMultiplayer) {
+				sf::Text rankText;
+				rankText.setFont(m_font);
+				rankText.setPosition(0, NON_TITLE_FONT_SIZE + 5);
+				rankText.setFillColor(sf::Color::Green); // Change based on selection
+				rankText.setCharacterSize(NON_TITLE_FONT_SIZE);
+				rankText.setString(std::string("Rank ") + std::to_string(m_rank) 
+									+ " out of " + std::to_string(m_particapantCount) + " people");
+				window.draw(rankText);
+			}
 			break;
 		}
 		case true: {
@@ -74,6 +84,9 @@ void GameLoop::moveSnake()
 
 	if (m_snake.hasEatenItSelf()) {
 		m_isGameOver = true;
+		if (m_isMultiplayer) {
+			m_client->kill();
+		}
 		return;
 	}
 
@@ -89,6 +102,12 @@ void GameLoop::moveSnake()
 		m_food.setPosition(x, y);
 		m_food.setSize(sf::Vector2f(DEFAULT_SNAKE_SIZE_X, DEFAULT_SNAKE_SIZE_Y));
 		m_score += 10;
+		auto score = m_score;
+		std::async([score](std::weak_ptr<Client> weakClient) {
+			if (auto client = weakClient.lock()) {
+				client->updateScore(score);
+			}
+		}, m_client);
 		m_snake.grow();
 	}
 
@@ -96,7 +115,17 @@ void GameLoop::moveSnake()
 	if ((currentPosition.x < 0 || (currentPosition.x + DEFAULT_SNAKE_SIZE_X) > WIDTH) ||
 		(currentPosition.y < 0 || (currentPosition.y + DEFAULT_SNAKE_SIZE_Y) > HEIGHT)) {
 		m_isGameOver = true;
+		if (m_isMultiplayer) {
+			m_client->kill();
+		}
 	}
+	auto& rank = m_rank;
+	auto& count = m_particapantCount;
+	std::async([&rank, &count](std::weak_ptr<Client> weakClient) {
+		if (auto client = weakClient.lock()) {
+			client->getRank(rank, count);
+		}
+	}, m_client);
 }
 
 bool GameLoop::isGameOver() const

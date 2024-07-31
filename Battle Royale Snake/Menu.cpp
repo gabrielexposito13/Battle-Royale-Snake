@@ -62,11 +62,11 @@ void Menu::processEvent(sf::RenderWindow& window, sf::Event& event)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		m_options = static_cast<MenuOptions>(((static_cast<uint8_t>(m_options)) + 1) % 2);
+		m_options = static_cast<MenuOptions>(((static_cast<int8_t>(m_options)) + 1) % 2);
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		m_options = static_cast<MenuOptions>(((static_cast<int8_t>(m_options)) - 1) % 2);
+		m_options = static_cast<MenuOptions>(((static_cast<int8_t>(m_options)) + 1) % 2);
 	}
 }
