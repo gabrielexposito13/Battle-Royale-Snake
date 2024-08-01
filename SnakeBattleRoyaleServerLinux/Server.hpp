@@ -1,14 +1,20 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
-#include <WinSock2.h>
-#include <winsock.h>
+
 #include <cstdint>
 #include <vector>
 #include <thread>
 #include <mutex>
 #include <unordered_map>
-#include <ws2tcpip.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <unistd.h> 
+
+#define SOCKET_ERROR -1
+#define INVALID_SOCKET -1
 
 enum Command : uint8_t {
 	Invalid,
@@ -37,7 +43,7 @@ private:
 	addrinfo* m_info = nullptr;
 	int m_socketHandle = INVALID_SOCKET;
 	std::vector<std::thread> m_Threads;
-	std::unordered_map<SOCKET, uint64_t> m_ranks; // Ordered hash map mapping a socket client handle to there current rank.
+	std::unordered_map<int, uint64_t> m_ranks; // Ordered hash map mapping a socket client handle to there current rank.
 	std::mutex m_mutex;
 };
 
